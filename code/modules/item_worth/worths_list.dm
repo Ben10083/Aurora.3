@@ -4,6 +4,8 @@
 
 var/list/worths = list(
 //ROBOT ASSEMBLIES,
+					/obj/item/secbot_assembly = 180,
+					/obj/item/secbot_assembly/ed209_assembly = 280,
 					/obj/item/farmbot_arm_assembly = 130,
 					/obj/item/firstaid_arm_assembly = 150,
 					/obj/item/bucket_sensor = 40,
@@ -716,6 +718,8 @@ var/list/worths = list(
 					/mob/living/bot/cleanbot = 260,
 					/mob/living/bot/farmbot = 500,
 					/mob/living/bot/medbot = 600,
+					/mob/living/bot/secbot/ed209 = 1200,
+					/mob/living/bot/secbot = 800,
 					/mob/living/bot = 300,
 //MOBS,
 					/mob/living/carbon/human = -10000,

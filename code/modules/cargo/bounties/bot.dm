@@ -15,6 +15,22 @@
 	random_count = 1
 	wanted_types = list(/mob/living/bot/farmbot)
 
+/datum/bounty/item/bot/secbot
+	name = "Secbot"
+	description = "To revitalise the residential zones on the %DOCKSHORT, management has decided to increase the security presence. Ship us a few security bots."
+	reward_low = 4000
+	reward_high = 4500
+	required_count = 2
+	wanted_types = list(/mob/living/bot/secbot)
+
+/datum/bounty/item/bot/ed209
+	name = "ED 209"
+	description = "To increase the security presence at our checkpoints we need a couple of ED209s."
+	reward_low = 8500
+	reward_high = 9500
+	required_count = 2
+	wanted_types = list(/mob/living/bot/secbot/ed209)
+
 /datum/bounty/item/bot/medbot
 	name = "Medibot"
 	description = "We were unable to recruit a sufficient number of qualified medical professionals this month. Ship us a few medibots to fill the void."

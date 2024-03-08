@@ -35,6 +35,68 @@
 
 	return
 
+/obj/item/radio/integrated/beepsky
+	/// list of bots
+	var/list/botlist = null
+	/// the active bot; if null, show bot list
+	var/mob/living/bot/secbot/active
+	/// the status signal sent by the bot
+	var/list/botstatus
+
+	var/control_freq = BOT_FREQ
+
+/// create a new QM cartridge, and register to receive bot control & beacon message
+/obj/item/radio/integrated/beepsky/Initialize()
+	. = ..()
+	SSradio.add_object(src, control_freq, filter = RADIO_SECBOT)
+
+	// receive radio signals
+	// can detect bot status signals
+	// create/populate list as they are recvd
+
+/obj/item/radio/integrated/beepsky/receive_signal(datum/signal/signal)
+	if (signal.data["type"] == "secbot")
+		if(!botlist)
+			botlist = new()
+
+		if(!(signal.source in botlist))
+			botlist += signal.source
+
+		if(active == signal.source)
+			var/list/b = signal.data
+			botstatus = b.Copy()
+
+/obj/item/radio/integrated/beepsky/Topic(href, href_list)
+	..()
+	var/obj/item/modular_computer/PDA = src.hostpda
+
+	switch(href_list["op"])
+
+		if("control")
+			active = locate(href_list["bot"])
+			post_signal(control_freq, "command", "bot_status", "active", active, s_filter = RADIO_SECBOT)
+
+		if("scanbots")		// find all bots
+			botlist = null
+			post_signal(control_freq, "command", "bot_status", s_filter = RADIO_SECBOT)
+
+		if("botlist")
+			active = null
+
+		if("stop", "go")
+			post_signal(control_freq, "command", href_list["op"], "active", active, s_filter = RADIO_SECBOT)
+			post_signal(control_freq, "command", "bot_status", "active", active, s_filter = RADIO_SECBOT)
+
+		if("summon")
+			post_signal(control_freq, "command", "summon", "active", active, "target", get_turf(PDA) , s_filter = RADIO_SECBOT)
+			post_signal(control_freq, "command", "bot_status", "active", active, s_filter = RADIO_SECBOT)
+
+
+/obj/item/radio/integrated/beepsky/Destroy()
+	SSradio.remove_object(src, control_freq)
+	return ..()
+
+
 /*
  *	Radio Cartridge, essentially a signaler.
  */

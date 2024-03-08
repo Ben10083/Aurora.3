@@ -144,6 +144,19 @@
 	return FALSE
 
 /obj/item/robot_parts/robot_suit/attackby(obj/item/attacking_item, mob/user)
+	if(istype(attacking_item, /obj/item/stack/material) && attacking_item.get_material_name() == DEFAULT_WALL_MATERIAL && !l_arm && !r_arm && !l_leg && !r_leg && !chest && !head)
+		var/obj/item/stack/material/M = attacking_item
+		if(M.use(1))
+			var/obj/item/secbot_assembly/ed209_assembly/B = new /obj/item/secbot_assembly/ed209_assembly
+			B.forceMove(get_turf(src))
+			to_chat(user, SPAN_NOTICE("You armed the robot frame."))
+			if(user.get_inactive_hand() == src)
+				user.remove_from_mob(src)
+				user.put_in_inactive_hand(B)
+			qdel(src)
+		else
+			to_chat(user, SPAN_WARNING("You need one sheet of metal to arm the robot frame."))
+		return
 	if(istype(attacking_item, /obj/item/robot_parts/l_leg))
 		if(l_leg)
 			to_chat(user, SPAN_WARNING("\The [src] already has \a [l_leg] installed."))
